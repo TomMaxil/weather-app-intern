@@ -293,6 +293,7 @@ a:hover {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  contain: layout style;
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -434,6 +435,7 @@ a:hover {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  contain: content;
 }
 
 .dashboard:focus {
@@ -698,6 +700,7 @@ a:hover {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  contain: layout paint;
 }
 
 .pill {
