@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Current conditions, hourly and weekly forecasts for any city.">
+  <meta name="theme-color" content="#1479b5">
+  <title>Weather Forecast</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body data-daylight="day">
+  <div class="backdrop" aria-hidden="true">
+    <span class="orb orb-sun"></span>
+    <span class="orb orb-mist"></span>
+    <span class="orb orb-lagoon"></span>
+  </div>
+
+  <a class="skip-link" href="#dashboard">Skip to forecast</a>
+
+  <div class="app">
+    <header class="app-header">
+      <p class="brand">
+        <i class="fa-solid fa-cloud-sun" aria-hidden="true"></i>
+        <span>Weather</span>
+      </p>
+      <form class="search-form" id="search-form" role="search" novalidate>
+        <label class="sr-only" for="city-input">Search for a city</label>
+        <i class="fa-solid fa-magnifying-glass search-icon" aria-hidden="true"></i>
+        <input class="search-input" id="city-input" name="city" type="search" placeholder="Search for a city" autocomplete="off" spellcheck="false" enterkeyhint="search">
+        <button class="btn" type="submit">Search</button>
+      </form>
+    </header>
+
+    <div class="error-bar" id="error-bar" role="alert" hidden>
+      <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+      <p class="error-message" id="error-message"></p>
+      <button class="btn btn-ghost" id="retry-button" type="button">
+        <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+        <span>Try again</span>
+      </button>
+    </div>
+
+    <main class="dashboard" id="dashboard" data-state="loading" aria-busy="true" tabindex="-1">
+      <div class="loader panel" role="status">
+        <span class="loader-ring" aria-hidden="true"></span>
+        <p>Fetching the latest forecast</p>
+      </div>
+
+      <div class="empty-state panel">
+        <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+        <p>No forecast to show yet. Search for a city to get started.</p>
+      </div>
+
+      <section class="panel hero" aria-labelledby="place-name">
+        <div class="hero-copy">
+          <h1 class="place-name" id="place-name">--</h1>
+          <p class="hero-temp">
+            <span id="current-temp">--</span>
+            <span class="hero-unit">°C</span>
+          </p>
+          <p class="hero-condition" id="current-condition">--</p>
+          <p class="hero-range" id="current-range">--</p>
+          <p class="hero-date" id="current-date">--</p>
+        </div>
+        <div class="hero-icon" id="hero-icon" aria-hidden="true"></div>
+      </section>
+
+      <section class="panel forecast-panel" aria-labelledby="forecast-title">
+        <h2 class="sr-only" id="forecast-title">Forecast</h2>
+        <div class="tabs" role="tablist" aria-label="Forecast range">
+          <button class="tab" id="tab-hourly" role="tab" type="button" aria-selected="true" aria-controls="panel-hourly">Hourly Forecast</button>
+          <button class="tab" id="tab-weekly" role="tab" type="button" aria-selected="false" aria-controls="panel-weekly" tabindex="-1">Weekly Forecast</button>
+        </div>
+        <div class="tabpanel" id="panel-hourly" role="tabpanel" aria-labelledby="tab-hourly" tabindex="0">
+          <ul class="track" id="hourly-track"></ul>
+        </div>
+        <div class="tabpanel" id="panel-weekly" role="tabpanel" aria-labelledby="tab-weekly" tabindex="0" hidden>
+          <ul class="track" id="weekly-track"></ul>
+        </div>
+      </section>
+
+      <section class="panel details-panel" aria-labelledby="details-title">
+        <h2 class="section-title" id="details-title">Weather Details</h2>
+        <ul class="metrics">
+          <li class="metric-card">
+            <i class="fa-solid fa-temperature-half metric-icon" aria-hidden="true"></i>
+            <span class="metric-label">Feels like</span>
+            <strong class="metric-value" id="feels-value">--</strong>
+            <span class="metric-note" id="feels-note"></span>
+          </li>
+          <li class="metric-card">
+            <i class="fa-solid fa-wind metric-icon" aria-hidden="true"></i>
+            <span class="metric-label">Wind</span>
+            <strong class="metric-value" id="wind-value">--</strong>
+            <span class="metric-note" id="wind-note"></span>
+          </li>
+          <li class="metric-card">
+            <i class="fa-solid fa-droplet metric-icon" aria-hidden="true"></i>
+            <span class="metric-label">Humidity</span>
+            <strong class="metric-value" id="humidity-value">--</strong>
+            <span class="metric-note" id="humidity-note"></span>
+          </li>
+          <li class="metric-card">
+            <i class="fa-solid fa-sun metric-icon" aria-hidden="true"></i>
+            <span class="metric-label">UV index</span>
+            <strong class="metric-value" id="uv-value">--</strong>
+            <span class="metric-note" id="uv-note"></span>
+          </li>
+          <li class="metric-card">
+            <i class="fa-solid fa-gauge-high metric-icon" aria-hidden="true"></i>
+            <span class="metric-label">Pressure</span>
+            <strong class="metric-value" id="pressure-value">--</strong>
+            <span class="metric-note" id="pressure-note"></span>
+          </li>
+          <li class="metric-card">
+            <i class="fa-solid fa-eye metric-icon" aria-hidden="true"></i>
+            <span class="metric-label">Visibility</span>
+            <strong class="metric-value" id="visibility-value">--</strong>
+            <span class="metric-note" id="visibility-note"></span>
+          </li>
+        </ul>
+
+        <div class="sun-card" id="sun-card">
+          <div class="sun-arc" aria-hidden="true">
+            <span class="sun-dot"></span>
+          </div>
+          <dl class="sun-times">
+            <div>
+              <dt><i class="fa-solid fa-sun" aria-hidden="true"></i> Sunrise</dt>
+              <dd id="sunrise-time">--:--</dd>
+            </div>
+            <div>
+              <dt><i class="fa-solid fa-moon" aria-hidden="true"></i> Sunset</dt>
+              <dd id="sunset-time">--:--</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="panel cities-panel" aria-labelledby="cities-title">
+        <h2 class="section-title" id="cities-title">Weather in other cities</h2>
+        <ul class="city-list" id="city-list"></ul>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Weather data by <a href="https://open-meteo.com/" rel="noopener">Open-Meteo</a></p>
+    </footer>
+  </div>
+
+  <p class="sr-only" id="live-region" aria-live="polite"></p>
+</body>
+</html>
