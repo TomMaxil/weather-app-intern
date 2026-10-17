@@ -198,6 +198,7 @@ a:hover {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  contain: layout paint style;
 }
 
 .orb {
@@ -289,11 +290,7 @@ a:hover {
   box-shadow: var(--shadow-out), var(--shadow-in);
   -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
   backdrop-filter: blur(var(--blur)) saturate(140%);
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  contain: layout style;
+  contain: layout paint style;
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -408,7 +405,7 @@ a:hover {
   border: 1px solid var(--danger-edge);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-out-sm);
-  animation: slide-in var(--speed-base) var(--ease) both;
+  animation: slide-in var(--speed-base) var(--ease) backwards;
 }
 
 .error-bar > i {
@@ -431,10 +428,6 @@ a:hover {
     "cities";
   gap: var(--gap);
   min-width: 0;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   contain: content;
 }
 
@@ -478,11 +471,12 @@ a:hover {
   border: 4px solid rgba(255, 255, 255, 0.3);
   border-top-color: var(--accent);
   border-radius: 50%;
+  will-change: transform;
   animation: spin 900ms linear infinite;
 }
 
 .dashboard[data-state="ready"] > :is(.hero, .forecast-panel, .details-panel, .cities-panel) {
-  animation: reveal var(--speed-slow) var(--ease) both;
+  animation: reveal var(--speed-slow) var(--ease) backwards;
   animation-delay: calc(var(--i, 0) * 90ms);
 }
 
@@ -975,6 +969,7 @@ a:hover {
   inset: 0;
   background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.18) 50%, transparent 80%);
   transform: translate3d(-100%, 0, 0);
+  will-change: transform;
   animation: shimmer 1.4s linear infinite;
 }
 
